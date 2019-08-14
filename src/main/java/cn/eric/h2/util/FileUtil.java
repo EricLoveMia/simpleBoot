@@ -225,6 +225,23 @@ public class FileUtil {
                 writer.close();
                 osw.close();
                 fos.close();
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // 删除原有的文件
+                delFile(new File(basePath + filePre));
+                // 重命名临时文件
+                File oldName = new File(basePath + filePre + "temp");
+                File newName = new File(basePath + filePre);
+                if(oldName.renameTo(newName)) {
+                    System.out.println("已重命名");
+                } else {
+                    System.out.println("Error");
+                }
+
                 // 索引删除
                 indexMap.remove(key);
 
@@ -238,6 +255,22 @@ public class FileUtil {
         }
         return false;
     }
+
+    static boolean delFile(File file) {
+        if (!file.exists()) {
+            return false;
+        }
+
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File f : files) {
+                delFile(f);
+            }
+        }
+        return file.delete();
+    }
+
+
 
     public static void main(String[] args) {
 //        Map map = new HashMap(32);
@@ -259,7 +292,7 @@ public class FileUtil {
 //        String k1 = FileUtil.getByFile("h2");
 //        System.out.println(k1);
 
-        boolean d3 = FileUtil.deleteByKey("h2");
+        boolean d3 = FileUtil.deleteByKey("r2");
         System.out.println(d3);
 
 //
