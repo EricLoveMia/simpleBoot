@@ -3,6 +3,8 @@ package cn.eric.h2.controller;
 import cn.eric.h2.entity.User;
 import cn.eric.h2.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +25,15 @@ import javax.annotation.Resource;
 @RequestMapping("/user")
 public class UserController {
 
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Resource
     private UserRepository repository;
 
     @GetMapping("/{id}")
     public R getUser(@PathVariable Integer id){
         User one = repository.getOne(id);
-        log.info(one.toString());
+        logger.info(one.toString());
         return R.ok();
     }
 }
