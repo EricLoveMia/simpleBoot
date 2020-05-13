@@ -24,10 +24,10 @@ public class CacheInitRunner implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         System.out.println("load cache..." + Arrays.asList(args));
         new Thread(() -> {
-            List<CacheEntity> list = null;
+            List<CacheEntity> list;
             while (true) {
                 // 每10秒 刷新一次文件
                 try {
