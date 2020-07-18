@@ -60,7 +60,7 @@ public class CacheInitRunner implements CommandLineRunner {
                         FileUtil.addToFile(collect1, next.getKey().substring(0, 1).toLowerCase());
                     }
                 } else {
-                    System.out.println("暂无缓存数据写入文件");
+                   // System.out.println("暂无缓存数据写入文件");
                 }
             }
         }).start();

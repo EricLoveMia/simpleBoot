@@ -22,6 +22,8 @@ public class FileUtil {
 
     public static final String basePath = "cache/";
 
+    public static final String fileReadIndexPath = "file_read/";
+
     private static final String line = "\t\n";
 
     private static final String[] preArray = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
@@ -270,7 +272,125 @@ public class FileUtil {
         return file.delete();
     }
 
+    // 文件内容的总行数
+    public static long getTotalLines(File file) throws IOException {
+        FileReader in = new FileReader(file);
+        LineNumberReader reader = new LineNumberReader(in);
+        String s = reader.readLine();
+        long lines = 0;
+        while (s != null) {
+            lines++;
+            s = reader.readLine();
+        }
+        reader.close();
+        in.close();
+        return lines;
+    }
 
+    // 读取文件指定行
+    public static String readLineNumber(File sourceFile, int lineNumber) throws IOException {
+        FileReader in = new FileReader(sourceFile);
+        LineNumberReader reader = new LineNumberReader(in);
+        String s = null;
+        int line = 1;
+        if (lineNumber < 0 || lineNumber > getTotalLines(sourceFile)) {
+            System.out.println("传入行数" + lineNumber + "有误，不在范围之内");
+        } else {
+            reader.setLineNumber(lineNumber);
+            int i = reader.getLineNumber();
+            while (reader.readLine() != null) {
+                line++;
+                if (i == line) {
+                    s = reader.readLine();
+                    break;
+                }
+            }
+        }
+        reader.close();
+        in.close();
+        return s;
+    }
+
+    // 读取文件指定行内容
+    public static String readLineNumberString(File sourceFile, int lineNumber) throws IOException {
+        String s = null;
+        if (lineNumber < 0 || lineNumber > getTotalLines(sourceFile)) {
+            System.out.println("传入行数" + lineNumber + "有误，不在范围之内");
+        } else {
+            InputStreamReader inputReader = null;
+            BufferedReader bufferReader = null;
+            // OutputStream outputStream = null;
+            try {
+                InputStream inputStream = new FileInputStream(sourceFile);
+                inputReader = new InputStreamReader(inputStream, "UTF-8");
+                bufferReader = new BufferedReader(inputReader);
+
+                // 读取一行
+                String lineContent = null;
+                StringBuilder strBuffer = new StringBuilder();
+                int currentReadLine = 0;
+                while ((lineContent = bufferReader.readLine()) != null) {
+                    currentReadLine++;
+                    if (currentReadLine == lineNumber) {
+                        strBuffer.append(lineContent);
+                        break;
+                    }
+                }
+                s = strBuffer.toString();
+            } catch (IOException e) {
+                System.out.println("" + e.getMessage());
+            } finally {
+                bufferReader.close();
+                inputReader.close();
+                // outputStream.close();
+                //IOCloseUtil.closeAll(outputStream, bufferReader, inputReader);
+            }
+        }
+        return s;
+    }
+
+
+    // 读取文件指定行到结尾
+    public static String readLineNumberStringToEnd(File sourceFile, long lineNumber,long endLine) throws IOException {
+        String s = null;
+        if (lineNumber < 0 || lineNumber > endLine) {
+            System.out.println("传入行数" + lineNumber + "有误，不在范围之内");
+        } else {
+            InputStreamReader inputReader = null;
+            BufferedReader bufferReader = null;
+            // OutputStream outputStream = null;
+            try {
+                InputStream inputStream = new FileInputStream(sourceFile);
+                inputReader = new InputStreamReader(inputStream, "UTF-8");
+                bufferReader = new BufferedReader(inputReader);
+
+                // 读取一行
+                String lineContent = null;
+                StringBuilder strBuffer = new StringBuilder();
+                int currentReadLine = 0;
+                while ((lineContent = bufferReader.readLine()) != null) {
+                    if(currentReadLine < lineNumber){
+                        currentReadLine++;
+                        continue;
+                    }
+                    currentReadLine++;
+                    strBuffer.append(lineContent);
+                    if (currentReadLine >= endLine) {
+                        break;
+                    }
+                }
+                s = strBuffer.toString();
+            } catch (IOException e) {
+                System.out.println("" + e.getMessage());
+            } finally {
+                bufferReader.close();
+                inputReader.close();
+                // outputStream.close();
+                //IOCloseUtil.closeAll(outputStream, bufferReader, inputReader);
+            }
+        }
+        return s;
+    }
 
     public static void main(String[] args) {
 //        Map map = new HashMap(32);
@@ -291,13 +411,27 @@ public class FileUtil {
 
 //        String k1 = FileUtil.getByFile("h2");
 //        System.out.println(k1);
-
-        boolean d3 = FileUtil.deleteByKey("r2");
-        System.out.println(d3);
+//
+//        boolean d3 = FileUtil.deleteByKey("r2");
+//        System.out.println(d3);
 
 //
 //        k1 = FileUtil.getByFile("h30");
 //        System.out.println(k1);
+
+        File sourceFile = new File("D:\\data\\file\\logs\\2020-06-04.txt");
+        try {
+            long lineNum = getTotalLines(sourceFile);
+            // 获取文件的内容的总行数
+            System.out.println("总行数=" + lineNum);
+            // 读取指定的行
+            long lineNumber = 0;
+            // String content = readLineNumberString(sourceFile, lineNumber);
+            String content = readLineNumberStringToEnd(sourceFile, lineNumber,lineNum);
+            System.out.println("第" + lineNumber + "行的内容是= \n" + content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
