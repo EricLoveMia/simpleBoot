@@ -88,10 +88,10 @@ public class HttpClientUtils {
                 // Consume response content
                 EntityUtils.consume(entity);
             }
-            System.out.println("请求地址: " + httpGet.getURI());
-            System.out.println("响应状态: " + response.getStatusLine());
-            System.out.println("响应长度: " + responseLength);
-            System.out.println("响应内容: " + responseContent);
+//            System.out.println("请求地址: " + httpGet.getURI());
+//            System.out.println("响应状态: " + response.getStatusLine());
+//            System.out.println("响应长度: " + responseLength);
+//            System.out.println("响应内容: " + responseContent);
         } catch (ClientProtocolException e) {
             logger.info(e.getMessage());
         } catch (ParseException e) {

@@ -1,12 +1,8 @@
 package cn.eric.h2.cache;
 
-import cn.eric.h2.util.http.HttpClientUtil;
 import cn.eric.h2.util.http.HttpClientUtils;
-import cn.eric.h2.util.http.HttpUtils;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
-import java.net.HttpURLConnection;
-import java.util.HashMap;
 import java.util.concurrent.*;
 
 /**
@@ -22,24 +18,29 @@ public class HttpTest {
 
     static ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("demo-pool-%d").build();
 
-    static ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 0L
+    static ExecutorService executorService = new ThreadPoolExecutor(20, 20, 0L
             , TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(1024), threadFactory,
             new ThreadPoolExecutor.CallerRunsPolicy());
 
     public static void main(String[] args) throws InterruptedException {
         long start = System.currentTimeMillis();
-        int N = 10000;
+        int N = 1000;
         CountDownLatch countDownLatch = new CountDownLatch(N);
         for (int i = 0; i < N; i++) {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    // HttpClientUtil.sendGet("https://blog.csdn.net/money9sun/article/details/99458302");
-                    // HttpUtils.doGet(url,new HashMap<>(),new HashMap<>());
+                    try {
+                        // HttpClientUtil.sendGet("https://blog.csdn.net/money9sun/article/details/99458302");
+                        // HttpUtils.doGet(url,new HashMap<>(),new HashMap<>());
 
-                    // 每次都新建http请求
-                    HttpClientUtils.sendGetRequest(url,"UTF-8");
-                    countDownLatch.countDown();
+                        // 每次都新建http请求
+                        HttpClientUtils.sendGetRequest(url, "UTF-8");
+                        countDownLatch.countDown();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        countDownLatch.countDown();
+                    }
                 }
             });
         }

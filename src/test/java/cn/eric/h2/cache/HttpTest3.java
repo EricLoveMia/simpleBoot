@@ -1,6 +1,6 @@
 package cn.eric.h2.cache;
 
-import cn.eric.h2.util.http.HttpClientUtils;
+import cn.eric.h2.util.http.HttpClientUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.*;
@@ -12,7 +12,7 @@ import java.util.concurrent.*;
  * @Date 2020/5/13
  * @Version V1.0
  **/
-public class HttpTest2 {
+public class HttpTest3 {
 
     static final String url = "https://blog.csdn.net/money9sun/article/details/99458302";
 
@@ -27,30 +27,15 @@ public class HttpTest2 {
         int N = 1000;
         CountDownLatch countDownLatch = new CountDownLatch(N);
         for (int i = 0; i < N; i++) {
-            // Thread.sleep(2);
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    // HttpClientUtil.sendGet("https://blog.csdn.net/money9sun/article/details/99458302");
-                    // HttpUtils.doGet(url,new HashMap<>(),new HashMap<>());
+            executorService.execute(() -> {
 
-                    // 每次都新建http请求
-                    try {
-                        String response = HttpClientUtils.sendGetRequest(url, "UTF-8");
-                        //JSONObject jsonObject = JSONObject.parseObject(response);
-                        //Object data = jsonObject.get("data");
-                        //if(data == null){
-                        //    System.out.println("出现异常");
-                        //}
-                        //List list = (List) data;
-                        //if(list.size() == 0){
-                        //    System.out.println("出现异常");
-                        //}
-                        countDownLatch.countDown();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        countDownLatch.countDown();
-                    }
+                // 每次都新建http请求
+                try {
+                    HttpClientUtil.sendGet(url);
+                    countDownLatch.countDown();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    countDownLatch.countDown();
                 }
             });
         }
