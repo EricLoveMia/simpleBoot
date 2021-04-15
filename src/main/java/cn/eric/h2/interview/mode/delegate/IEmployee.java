@@ -1,4 +1,4 @@
-package cn.eric.h2.interview.delegate;
+package cn.eric.h2.interview.mode.delegate;
 
 /**
  * @author eric

@@ -1,4 +1,4 @@
-package cn.eric.h2.interview.proxy;
+package cn.eric.h2.interview.mode.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
