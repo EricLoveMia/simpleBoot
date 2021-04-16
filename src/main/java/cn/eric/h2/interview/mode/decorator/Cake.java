@@ -1,5 +1,7 @@
 package cn.eric.h2.interview.mode.decorator;
 
+import java.math.BigDecimal;
+
 /**
  * @ClassName Cake
  * @Description: TODO
@@ -8,4 +10,9 @@ package cn.eric.h2.interview.mode.decorator;
  * @Version V1.0
  **/
 public abstract class Cake {
+
+    public abstract String getCakeMsg();
+
+    public abstract BigDecimal getPrice();
+
 }
